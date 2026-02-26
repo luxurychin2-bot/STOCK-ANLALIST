@@ -17,7 +17,9 @@ START = "2018-01-01"
 
 def load_price(ticker):
     df = yf.download(ticker, start=START, progress=False)
-    return df[['Close']].dropna()
+    df = df[['Close']].dropna()
+    df['ma120'] = df['Close'].rolling(120).mean()
+    return df.dropna()
 
 def calculate_score(df):
     df['ma20'] = df['Close'].rolling(20).mean()
