@@ -15,12 +15,32 @@ SECTOR_ETF = {
 
 START = "2018-01-01"
 
-def load_price(ticker):
-    df = yf.download(ticker, start=START, progress=False)
-    df = df[['Close']].dropna()
-    df['ma120'] = df['Close'].rolling(120).mean()
-    return df.dropna()
+def calculate_score(df):
+    score = 0
 
+    df = df.copy()
+    df["ma120"] = df["Close"].rolling(120).mean()
+
+    # 🔒 데이터 길이 안전장치
+    if len(df) < 130:
+        return 0
+
+    close = float(df["Close"].iloc[-1])
+    ma120 = float(df["ma120"].iloc[-1])
+
+    if pd.isna(ma120):
+        return 0
+
+    if close > ma120:
+        score += 10
+
+    # 20일 모멘텀
+    momentum = (close / float(df["Close"].iloc[-21]) - 1) * 100
+    if momentum > 0:
+        score += 10
+
+    return score
+    
 def calculate_score(df):
     df['ma20'] = df['Close'].rolling(20).mean()
     df['ma60'] = df['Close'].rolling(60).mean()
