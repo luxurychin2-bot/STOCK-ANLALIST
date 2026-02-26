@@ -88,7 +88,7 @@ def calculate_score(df):
     df["ma120"] = df["Close"].rolling(120).mean()
 
     if pd.isna(df["ma120"].iloc[-1]):
-    return 0
+        return 0
 
     return score
 
@@ -139,7 +139,7 @@ def monthly_backtest():
                 best_score = score
                 best_sector = df
 
-        if best_sector is not None:
+            if best_sector is not None:
             ret = best_sector["Close"].pct_change().iloc[-1]
             monthly_returns.append(ret)
 
