@@ -43,19 +43,23 @@ def calculate_score(df):
 
     last = df.iloc[-1]
 
+    close = float(last["Close"])
+    ma20 = float(last["ma20"])
+    ma60 = float(last["ma60"])
+    ma120 = float(last["ma120"])
+
     score = 0
-    if last["Close"] > last["ma20"]:
+    if close > ma20:
         score += 1
-    if last["Close"] > last["ma60"]:
+    if close > ma60:
         score += 1
-    if last["Close"] > last["ma120"]:
+    if close > ma120:
         score += 1
-    if last["ma20"] > last["ma60"]:
+    if ma20 > ma60:
         score += 1
-    if last["ma60"] > last["ma120"]:
+    if ma60 > ma120:
         score += 1
 
-    return score
 
 # ------------------------
 # 섹터 점수 계산
