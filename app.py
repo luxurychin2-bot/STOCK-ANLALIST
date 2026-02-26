@@ -140,8 +140,7 @@ def monthly_backtest():
                 best_sector = df
 
             if best_sector is not None:
-            ret = best_sector["Close"].pct_change().iloc[-1]
-            monthly_returns.append(ret)
+                ret = best_sector["Close"].pct_change().iloc[-1]
 
     equity = (1 + pd.Series(monthly_returns)).cumprod()
     return equity
