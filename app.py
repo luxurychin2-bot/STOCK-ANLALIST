@@ -81,8 +81,10 @@ def calculate_score(df):
     score = 0
     if df["ret20"].iloc[-1] > 0:
         score += 10
+        
     if df["ret60"].iloc[-1] > 0:
         score += 10
+        
     df["ma120"] = df["Close"].rolling(120).mean()
 
     if pd.isna(df["ma120"].iloc[-1]):
