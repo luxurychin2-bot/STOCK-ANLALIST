@@ -47,10 +47,17 @@ def calculate_score(df):
     return 20 if df['ma20'].iloc[-1] > df['ma60'].iloc[-1] else 0
 
 scores = {}
+
 for name, ticker in SECTOR_ETF.items():
     df = load_price(ticker)
-    if len(df) > 60:
-        scores[name] = calculate_score(df)
+
+    if len(df) < 120:
+        continue
+
+    score = calculate_score(df)
+    scores[name] = score
+
+top2 = sorted(scores.items(), key=lambda x: x[1], reverse=True)[:2]
 
 top2 = sorted(scores.items(), key=lambda x: x[1], reverse=True)[:2]
 
@@ -76,8 +83,10 @@ def calculate_score(df):
         score += 10
     if df["ret60"].iloc[-1] > 0:
         score += 10
-    if df["Close"].iloc[-1] > df["ma120"].iloc[-1]:
-        score += 10
+    df["ma120"] = df["Close"].rolling(120).mean()
+
+    if pd.isna(df["ma120"].iloc[-1]):
+    return 0
 
     return score
 
